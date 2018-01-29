@@ -1,14 +1,46 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+    <p style="text-align: center; margin-top:10px;">
+        <img alt="logo" height="40" src="assets/imgs/LogoWhite.svg" > 
+    </p>
+    <p style="color:white; text-align: center; font-size:2em; margin-top:30px;">Load Credit</p>
+    <form [formGroup]="request" (ngSubmit)="submit()">
+      <ion-item>
+        <ion-label floating class="label-input">Email</ion-label>
+        <ion-input color="light" type="email" formControlName="email"
+        pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating class="label-input">Select Field</ion-label>
+        <ion-select  formControlName="field" (ionChange)="updatePrice()">
+          <ion-option *ngFor="let item of fields" value="{{item.name}}">{{item.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+          <ion-label floating class="label-input">Number of Months</ion-label>
+        <ion-input type="tel" maxlength="2" pattern="[0-9]{1,}" (change)="updatePrice()" formControlName="months"></ion-input>
+      </ion-item>
+
+      <p class="priceTag">Price: Rs. {{price}}</p>
+      
+      <ion-item>
+          <ion-label floating class="label-input">Pin Code:</ion-label>
+          <ion-input type="password" maxlength="4" pattern="[0-9]{4}" formControlName="pin"></ion-input>
+      </ion-item>
+         
+      <div text-center padding *ngIf="showErrMsg" class="errorLabel">
+        Pin is incorrect
+      </div>
+  
+      <ion-grid>
+        <ion-row> 
+          <ion-col style="text-align: center">
+              <button padding ion-button type="submit" class="centeredButton" [disabled]="!request.valid">Submit</button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+   
+    </form>
+
 </ion-content>

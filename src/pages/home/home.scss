@@ -1,3 +1,45 @@
 page-home {
+    input { 
+        color: white;
+    }
 
+    .label-input {
+        font-weight: bolder;
+        color: white !important;
+    }
+
+    .centeredButton {
+        width: 200px;
+        border-radius: 7px;
+        margin-top: 30px;
+        background: #484A8C;
+    }
+
+    .inputItem {
+        width: 80%;
+        margin-top: 7px;
+    }
+
+    ion-select {
+        color: white;
+        align-items: center;
+    }
+
+    .priceTag {
+        margin-top: 20px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+    }
+
+    ion-item {
+        margin: 5px auto !important;
+        padding: 0px !important;
+    }
+
+    .errorLabel {
+        color: red;
+        margin-top: 15px !important;
+    }
 }
+
