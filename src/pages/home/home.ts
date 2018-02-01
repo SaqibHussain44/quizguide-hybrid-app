@@ -18,6 +18,7 @@ export class HomePage {
   private fields: Array<any> ;
   private currentUser: any;
   private showErrMsg: boolean;
+  private showPriceZeroError: boolean;
   private selectedFieldIndex = 0;
 
   constructor(public navCtrl: NavController, public http: Http, private formBuilder: FormBuilder, private storage: Storage, 
@@ -32,9 +33,9 @@ export class HomePage {
       price: ['']
     }); 
     
-    this.syncFields();
     storage.get('user').then(obj => {
       this.currentUser = obj;
+      this.syncFields();
     });
 
   }
@@ -44,7 +45,6 @@ export class HomePage {
     .subscribe(response => {
         this.fields = response.json();
         console.log(this.fields);
-        console.log(this.currentUser);
     });
   }
 
@@ -56,27 +56,58 @@ export class HomePage {
       }
     }
     this.request.value.price = this.price;
-    this.price = 0;
   }
 
   async submit() {
     this.presentLoading();
     this.updatePrice();
+
+    // error handlers
     if(this.request.value.pin != this.currentUser.pin) {
       this.showErrMsg = true;
       this.dismissLoader();
       return;
     }
+    if(this.price == 0) {
+      this.showPriceZeroError = true;
+      this.dismissLoader();
+      return;
+    }
+
     this.showErrMsg = false;
+    this.showPriceZeroError = false;
+
     const result = await this.shopkProvider.topUp(this.request.value, this.currentUser, this.fields[this.selectedFieldIndex]._id);
     this.dismissLoader();
+
     if(result) {
+      if(!result.error) {
+        this.alertCtrl.create({
+          title: 'Topup Successful!',
+          subTitle: 'Your remaining balance is:  ' + this.currentUser.currentCredit,
+          buttons: ['OK']
+        }).present();
+        this.request.reset();
+        this.price = 0;
+      }
+      else {
+        this.alertCtrl.create({
+          title: 'Topup failed!',
+          subTitle: result.error + ' Please try again',
+          buttons: ['OK']
+        }).present();
+        this.request.reset();
+        this.price = 0;
+      }
+    }
+    else {
       this.alertCtrl.create({
-        title: 'Topup Successful!',
-        subTitle: 'Your remaining balance is:  ' + this.currentUser.currentCredit,
+        title: 'Topup failed!',
+        subTitle: 'Sorry, something went wrong. Try again',
         buttons: ['OK']
       }).present();
       this.request.reset();
+      this.price = 0;
     }
   }
 

@@ -5,7 +5,6 @@ import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
 import { Http } from '@angular/http';
 
-
 @IonicPage()
 @Component({
   selector: 'page-login',

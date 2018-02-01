@@ -23,7 +23,7 @@ export class ShopkeeperProvider {
     shopkeeper.currentCredit = shopkeeper.currentCredit - price;
     shopkeeper.lastTopupId = this.lastTopupId;
     const result = await this.http.post('/api/shopkeepers/topup', shopkeeper).toPromise();
-    if(result){
+    if(!result.error){
       this.storage.set('user', shopkeeper);
       return result;
     }
@@ -32,10 +32,15 @@ export class ShopkeeperProvider {
 
   // request server to append a new subscribtion to user's subscription array 
   async performTopup(newSub) {
-    const result = await this.http.post('/api/users/topup', newSub).toPromise();
-    if(result) {
-      const topUpIdIndex = result._subscriptions.length - 1;
-      this.lastTopupId = result._subscriptions[topUpIdIndex]._id;
+    var result = await this.http.post('/api/users/topup', newSub).toPromise();
+    if(!result.error) {
+      try{
+        const topUpIdIndex = result._subscriptions.length - 1;
+        this.lastTopupId = result._subscriptions[topUpIdIndex]._id;
+      }
+      catch(e){
+        return false;
+      }
       return result;
     }
     return false;
@@ -69,11 +74,11 @@ export class ShopkeeperProvider {
         return newShopKeeperCredentials;
       }
       else {
-        return 'something went wrong';
+        return {error: 'Email is incorrect or User may not be Registered!'};
       }
     }
     else {
-      return 'insufficient balance';
+      return {error: 'insufficient balance'};
     }
   }
 
