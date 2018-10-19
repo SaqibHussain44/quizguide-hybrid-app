@@ -40,17 +40,11 @@ export class LoginPage {
 
   login() {
     this.presentLoading();
-    this.http.get('/api/shopKeepers/phone/'+ this.user.value.phone).subscribe(value => {
+    this.http.get('https://quizguide-dev.herokuapp.com/api/shopKeepers/phone/'+ this.user.value.phone).subscribe(value => {
       if(this.authenticate(value)){
         this.storage.set('user', this.currentUser);
         this.dismissLoader();
 
-        this.alertCtrl.create({
-          title: 'Login Successful!',
-          subTitle: 'Your 4 digit security pin is: ' + this.currentUser.pin,
-          buttons: ['OK']
-        }).present();
-        
         this.navCtrl.setRoot(HomePage);
       }
       else{

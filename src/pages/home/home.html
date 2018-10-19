@@ -1,8 +1,13 @@
 <ion-content padding>
-    <p style="text-align: center; margin-top:10px;">
-        <img alt="logo" height="40" src="assets/imgs/LogoWhite.svg" > 
-    </p>
-    <p style="color:white; text-align: center; font-size:2em; margin-top:30px;">Load Credit</p>
+
+    <div float-left style="margin-top:7px;">
+      <img alt="logo" height="25" src="assets/imgs/LogoWhite.svg" /> 
+    </div>
+    <button float-right ion-button class="myBtn" (click)="logout()">Logout</button>
+    <button float-right ion-button class="myBtn" (click)="navigate()">History</button>
+
+    <p style="color:white; text-align: center; font-size:1.6em; margin-top:80px;">Load Credit</p>
+
     <form [formGroup]="request" (ngSubmit)="submit()">
       <ion-item>
         <ion-label floating class="label-input">Email</ion-label>
@@ -45,5 +50,5 @@
       </ion-grid>
    
     </form>
-
+    
 </ion-content>

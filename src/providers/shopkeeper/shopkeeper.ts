@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import * as _ from 'lodash';
 
 @Injectable()
 export class ShopkeeperProvider {
 
   public lastTopupId: any;
   constructor(public http: HttpClient, private storage: Storage) {
-
-  }
+      
+  } 
 
   // checks wether shopkeeper's currentCredit > requested topup
   isTransactionValid(topupData, shopkeeper) {
@@ -20,10 +21,11 @@ export class ShopkeeperProvider {
 
   // deduct credit from shopKeeper's account
   async deductCredit(shopkeeper, price) {
+    var result = <any>{};
     shopkeeper.currentCredit = shopkeeper.currentCredit - price;
     shopkeeper.lastTopupId = this.lastTopupId;
-    const result = await this.http.post('/api/shopkeepers/topup', shopkeeper).toPromise();
-    if(!result.error){
+    result = await this.http.post('https://quizguide-dev.herokuapp.com/api/shopkeepers/topup', shopkeeper).toPromise();
+    if(typeof(result.error) === "undefined"){
       this.storage.set('user', shopkeeper);
       return result;
     }
@@ -32,8 +34,9 @@ export class ShopkeeperProvider {
 
   // request server to append a new subscribtion to user's subscription array 
   async performTopup(newSub) {
-    var result = await this.http.post('/api/users/topup', newSub).toPromise();
-    if(!result.error) {
+    var result = <any>{};
+    result = await this.http.post('https://quizguide-dev.herokuapp.com/api/users/topup', newSub).toPromise();
+    if(typeof(result.error) === "undefined") {
       try{
         const topUpIdIndex = result._subscriptions.length - 1;
         this.lastTopupId = result._subscriptions[topUpIdIndex]._id;
@@ -47,9 +50,9 @@ export class ShopkeeperProvider {
   }
   
   calculateEndDate(months) {
-    const currentDate = new Date();
-    currentDate.setMonth(currentDate.getMonth() + months);
-    return currentDate;
+    const date = new Date();
+    date.setMonth(date.getMonth() + months);
+    return date;
   }
   
   // processes user's topUp request
@@ -80,6 +83,16 @@ export class ShopkeeperProvider {
     else {
       return {error: 'insufficient balance'};
     }
+  }
+
+  async topupHistory() {
+    var result = <any>{};
+    result = await this.http.get('https://quizguide-dev.herokuapp.com/api/users/all').toPromise();
+    _.each(result, (user) => {
+      
+    });
+
+    return result;
   }
 
 }

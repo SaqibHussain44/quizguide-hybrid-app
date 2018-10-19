@@ -10,16 +10,18 @@ import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
+import { HistoryPage } from '../pages/history/history';
 import { ShopkeeperProvider } from '../providers/shopkeeper/shopkeeper';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    LoginPage
+    LoginPage,
+    HistoryPage
   ],
   imports: [
-    BrowserModule,
+  BrowserModule,
     HttpModule,
     HttpClientModule,
     IonicModule.forRoot(MyApp),
@@ -29,7 +31,8 @@ import { ShopkeeperProvider } from '../providers/shopkeeper/shopkeeper';
   entryComponents: [
     MyApp,
     HomePage,
-    LoginPage
+    LoginPage,
+    HistoryPage
   ],
   providers: [
     StatusBar,

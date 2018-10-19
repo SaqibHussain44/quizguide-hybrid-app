@@ -6,6 +6,9 @@ import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { ShopkeeperProvider } from '../../providers/shopkeeper/shopkeeper';
 
+import { HistoryPage } from '../history/history';
+import { LoginPage } from '../login/login';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -41,7 +44,7 @@ export class HomePage {
   }
 
   syncFields() {
-    this.http.get("/api/fields")
+    this.http.get("https://quizguide-dev.herokuapp.com/api/fields")
     .subscribe(response => {
         this.fields = response.json();
         console.log(this.fields);
@@ -120,6 +123,15 @@ export class HomePage {
 
   dismissLoader() {
     this.loader.dismiss();
+  }
+
+  navigate() {
+    this.navCtrl.push(HistoryPage);
+  }
+  logout() {
+    this.storage.remove('user').then(re => {
+      this.navCtrl.push(LoginPage);
+    });
   }
 
 }
